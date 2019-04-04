@@ -1,6 +1,8 @@
 import pygame
 pygame.init()
 black = (0,0,0)
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -25,12 +27,12 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         if self.rect.x <= 1:
             self.rect.x = 1
-        elif self.rect.x >= size[0] - 31:
-            self.rect.x = size[0] - 31
+        elif self.rect.x >= size[0] - (self.image.get_width() + 1):
+            self.rect.x = size[0] - (self.image.get_width() + 1)
         if self.rect.y <= 1:
             self.rect.y = 1
-        elif self.rect.y >= size[1] - 31:
-            self.rect.y = size [1] - 31
+        elif self.rect.y >= size[1] - (self.image.get_height() + 1):
+            self.rect.y = size [1] - (self.image.get_height() +1)
 
 
         self.rect.x += self.movex
