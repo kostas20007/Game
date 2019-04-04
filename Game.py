@@ -9,8 +9,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface([30,30])
         self.image.fill(black)
         self.rect = self.image.get_rect()
-        self.rect.x = 100
-        self.rect.y = 100
+        self.rect.x = 300
+        self.rect.y = 550
         self.movex = 0
         self.movey = 0
     def goL(self):
@@ -39,8 +39,34 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.movey
 
 p = Player()
+
+
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface([5,10])
+        self.image.fill(black)
+        self.rect = self.image.get_rect()
+        
+        #defines the exact position of the bullet (so it appears in the middle over the player):
+        self.rect.x = p.rect.x + p.image.get_width()/2-self.image.get_width()/2
+
+        self.rect.y = p.rect.y 
+        self.movey = -5
+    def update(self):
+        self.rect.y += self.movey
+        
+
+
+
+
+
+
+
 lista = pygame.sprite.Group()
 lista.add(p)
+
 
 size = (700,600)
 screen = pygame.display.set_mode(size)
@@ -51,15 +77,25 @@ clock = pygame.time.Clock()
 
 done = False
 
+def fire():
+    b = Bullet()
+    lista.add(b)
+
+
+
 while done == False:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
         elif event.type == pygame.KEYUP:
             p.stop()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LCTRL:
+                fire()
 
 
         keys = pygame.key.get_pressed()
+        
         if keys[pygame.K_LEFT]:
             p.goL()
         elif keys[pygame.K_RIGHT]:
@@ -68,7 +104,7 @@ while done == False:
             p.goU()
         elif keys[pygame.K_DOWN]:
             p.goD()
-
+        
       
     
     screen.fill(yellow)
