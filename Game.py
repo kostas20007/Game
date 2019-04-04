@@ -23,6 +23,16 @@ class Player(pygame.sprite.Sprite):
         self.movex = 0
         self.movey = 0
     def update(self):
+        if self.rect.x <= 1:
+            self.rect.x = 1
+        elif self.rect.x >= size[0] - 31:
+            self.rect.x = size[0] - 31
+        if self.rect.y <= 1:
+            self.rect.y = 1
+        elif self.rect.y >= size[1] - 31:
+            self.rect.y = size [1] - 31
+
+
         self.rect.x += self.movex
         self.rect.y += self.movey
 
@@ -35,6 +45,7 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("THE Game")
 yellow = (255,255,0)
 clock = pygame.time.Clock()
+
 
 done = False
 
@@ -56,6 +67,8 @@ while done == False:
         elif keys[pygame.K_DOWN]:
             p.goD()
 
+      
+    
     screen.fill(yellow)
     lista.update()
     lista.draw(screen)
