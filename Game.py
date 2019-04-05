@@ -5,6 +5,9 @@ black = (0,0,0)
 red = (255,0,0)
 size = (700,600)
 green = (0,255,0)
+font = pygame.font.SysFont("Arial",25)
+
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -16,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = 550
         self.movex = 0
         self.movey = 0
+        self.lives = 3
     def goL(self):
         self.movex = -3
     def goR(self):
@@ -146,18 +150,23 @@ while done == False:
         
     hitEnemy_list = pygame.sprite.spritecollide(p,enemy_list,False)
     for item in hitEnemy_list:
+        p.lives -= 1
+
+
+
         item.reset()
+        
         
     
 
     
     
     screen.fill(yellow)
+    livesText = font.render("Lives: "+str(p.lives),True,black)
+    screen.blit(livesText,[10,10])
+    
     lista.update()
     lista.draw(screen)
     pygame.display.flip()       
     clock.tick(60)
 pygame.quit()
-
-
-
