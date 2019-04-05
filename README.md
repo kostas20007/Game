@@ -1,2 +1,2 @@
 # Game
-Game made with Python and pygame
+Making a game with python 3 and pygame
