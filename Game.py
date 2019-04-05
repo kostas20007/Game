@@ -4,6 +4,7 @@ pygame.init()
 black = (0,0,0)
 red = (255,0,0)
 size = (700,600)
+green = (255,0,255)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -51,13 +52,18 @@ class Bullet(pygame.sprite.Sprite):
         self.image.fill(black)
         self.rect = self.image.get_rect()
         
-        #defines the exact position of the bullet (so it appears in the middle over the player):
+        #defines the exact position of the bullet (so it appears in the middle over the player)->
         self.rect.x = p.rect.x + p.image.get_width()/2-self.image.get_width()/2
 
         self.rect.y = p.rect.y 
         self.movey = -5
+        
     def update(self):
         self.rect.y += self.movey
+        if self.rect.y <= 0:
+            bullets_list.remove(self)
+            lista.remove(self)
+            
         
 
 class Enemy(pygame.sprite.Sprite):
@@ -71,22 +77,34 @@ class Enemy(pygame.sprite.Sprite):
         self.movey = 3
 
     def update(self):
+        
         self.rect.y += self.movey
         if self.rect.y > size[1]:
+            self.reset()
 
-            #Random appearance on x Axis:
-            self.rect.x = random.randrange(0,size[0]-e.image.get_width())
+    def reset(self):
+        color = random.randint(0,1)
+        if color == 0:
+            self.image.fill(red)
+        else:
+            self.image.fill(green)
+            
+        #Random appearance on x Axis->
+        self.rect.x = random.randint(0,size[0]-e.image.get_width())
 
-            self.rect.y = -self.image.get_height()
-
+        self.rect.y = -self.image.get_height()
+        
 
 e = Enemy()
 
 
-
+bullets_list = pygame.sprite.Group()
 lista = pygame.sprite.Group()
+enemy_list = pygame.sprite.Group()
 lista.add(p)
 lista.add(e)
+
+enemy_list.add(e)
 
 
 screen = pygame.display.set_mode(size)
@@ -99,6 +117,7 @@ done = False
 
 def fire():
     b = Bullet()
+    bullets_list.add(b)
     lista.add(b)
 
 
@@ -125,7 +144,13 @@ while done == False:
         elif keys[pygame.K_DOWN]:
             p.goD()
         
-      
+    hitEnemy_list = pygame.sprite.spritecollide(p,enemy_list,False)
+    for item in hitEnemy_list:
+        item.reset()
+        
+    
+
+    
     
     screen.fill(yellow)
     lista.update()
