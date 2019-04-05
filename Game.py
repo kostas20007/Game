@@ -4,7 +4,7 @@ pygame.init()
 black = (0,0,0)
 red = (255,0,0)
 size = (700,600)
-green = (255,0,255)
+green = (0,255,0)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
