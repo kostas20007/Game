@@ -20,6 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.movex = 0
         self.movey = 0
         self.lives = 3
+        self.score = 0
     def goL(self):
         self.movex = -3
     def goR(self):
@@ -61,12 +62,15 @@ class Bullet(pygame.sprite.Sprite):
 
         self.rect.y = p.rect.y 
         self.movey = -5
+    def reset(self):
+        bullets_list.remove(self)
+        lista.remove(self)
         
     def update(self):
         self.rect.y += self.movey
         if self.rect.y <= 0:
-            bullets_list.remove(self)
-            lista.remove(self)
+            self.reset()
+            
             
         
 
@@ -79,16 +83,18 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x = 300
         self.rect.y = 100
         self.movey = 3
-
+        self.color = 0
     def update(self):
         
         self.rect.y += self.movey
         if self.rect.y > size[1]:
+            
+            p.lives -= 1
             self.reset()
 
     def reset(self):
-        color = random.randint(0,1)
-        if color == 0:
+        self.color = random.randint(0,1)
+        if self.color == 0:
             self.image.fill(red)
         else:
             self.image.fill(green)
@@ -150,18 +156,34 @@ while done == False:
         
     hitEnemy_list = pygame.sprite.spritecollide(p,enemy_list,False)
     for item in hitEnemy_list:
-        p.lives -= 1
+        if item.color == 0:
+
+            p.lives -= 1
+        else:
+            p.score += 1
 
 
 
         item.reset()
         
-        
     
+    hitBullets_List = pygame.sprite.spritecollide(e,bullets_list,False)
+    for bu in hitBullets_List:
+        if e.color == 0:
+            p.score += 1
+        else:
+            p.lives -= 1
+
+        bu.reset()
+        e.reset()
+        
 
     
     
+    
     screen.fill(yellow)
+    scoreText = font.render("Score: "+str(p.score),True,black)
+    screen.blit(scoreText,[size[1]-50,10])
     livesText = font.render("Lives: "+str(p.lives),True,black)
     screen.blit(livesText,[10,10])
     
