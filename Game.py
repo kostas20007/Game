@@ -1,7 +1,9 @@
 import pygame
+import random
 pygame.init()
 black = (0,0,0)
-
+red = (255,0,0)
+size = (700,600)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -58,17 +60,35 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.y += self.movey
         
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface([60,60])
+        self.image.fill(red)
+        self.rect = self.image.get_rect()
+        self.rect.x = 300
+        self.rect.y = 100
+        self.movey = 3
+
+    def update(self):
+        self.rect.y += self.movey
+        if self.rect.y > size[1]:
+
+            #Random appearance on x Axis:
+            self.rect.x = random.randrange(0,size[0]-e.image.get_width())
+
+            self.rect.y = -self.image.get_height()
 
 
-
+e = Enemy()
 
 
 
 lista = pygame.sprite.Group()
 lista.add(p)
+lista.add(e)
 
 
-size = (700,600)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("THE Game")
 yellow = (255,255,0)
