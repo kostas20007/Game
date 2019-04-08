@@ -8,7 +8,6 @@ green = (0,255,0)
 font = pygame.font.SysFont("Arial",25)
 
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -24,6 +23,7 @@ class Player(pygame.sprite.Sprite):
         self.movey = 0
         self.lives = 3
         self.score = 0
+        self.gameover = False
     def goL(self):
         self.image = self.image_list[1]
         self.movex = -3
@@ -96,6 +96,8 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.y > size[1]:
             
             p.lives -= 1
+            if p.lives <=0:
+                p.gameover = True
             self.reset()
 
     def reset(self):
@@ -131,6 +133,9 @@ clock = pygame.time.Clock()
 
 done = False
 
+goText = font.render("GAME OVER",True,red)
+pressSpaceText = font.render("PRESS SPACE BAR TO PLAY AGAIN",True,green)
+
 def fire():
     b = Bullet()
     bullets_list.add(b)
@@ -159,12 +164,22 @@ while done == False:
             p.goU()
         elif keys[pygame.K_DOWN]:
             p.goD()
+
+        if keys[pygame.K_SPACE] and p.gameover:
+            p.lives = 3
+            p.score = 0
+            p.gameover = False
+
+        
+            
         
     hitEnemy_list = pygame.sprite.spritecollide(p,enemy_list,False)
     for item in hitEnemy_list:
         if item.color == 0:
 
             p.lives -= 1
+            if p.lives <=0:
+                p.gameover = True
         else:
             p.score += 1
 
@@ -179,22 +194,34 @@ while done == False:
             p.score += 1
         else:
             p.lives -= 1
+            if p.lives <=0:
+                p.gameover = True
 
         bu.reset()
         e.reset()
         
-
+    
     
     
     
     screen.fill(yellow)
+    if p.gameover:
+        screen.blit(goText,[250,300])
+        screen.blit(pressSpaceText,[100,400])
+        for x in bullets_list:
+            x.reset()
+    else:
+        lista.update()
+        lista.draw(screen)    
+
+
+
+    
     scoreText = font.render("Score: "+str(p.score),True,black)
     screen.blit(scoreText,[size[1]-50,10])
     livesText = font.render("Lives: "+str(p.lives),True,black)
     screen.blit(livesText,[10,10])
     
-    lista.update()
-    lista.draw(screen)
     pygame.display.flip()       
     clock.tick(60)
 pygame.quit()
