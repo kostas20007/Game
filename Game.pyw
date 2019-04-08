@@ -12,8 +12,11 @@ font = pygame.font.SysFont("Arial",25)
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface([30,30])
-        self.image.fill(black)
+        self.image_list = []
+        self.image_list.append(pygame.image.load("Assets/center.png"))
+        self.image_list.append(pygame.image.load("Assets/left.png"))
+        self.image_list.append(pygame.image.load("Assets/right.png"))
+        self.image = self.image_list[0]
         self.rect = self.image.get_rect()
         self.rect.x = 300
         self.rect.y = 550
@@ -22,14 +25,17 @@ class Player(pygame.sprite.Sprite):
         self.lives = 3
         self.score = 0
     def goL(self):
+        self.image = self.image_list[1]
         self.movex = -3
     def goR(self):
+        self.image = self.image_list[2]
         self.movex = 3
     def goU(self):
         self.movey = -3
     def goD(self):
         self.movey = 3
     def stop(self):
+        self.image = self.image_list[0]
         self.movex = 0
         self.movey = 0
     def update(self):
@@ -53,7 +59,7 @@ p = Player()
 class Bullet(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface([5,10])
+        self.image = pygame.Surface([p.image.get_width()/6,p.image.get_height()/3])
         self.image.fill(black)
         self.rect = self.image.get_rect()
         
