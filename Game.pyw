@@ -94,10 +94,7 @@ class Enemy(pygame.sprite.Sprite):
         
         self.rect.y += self.movey
         if self.rect.y > size[1]:
-            
-            p.lives -= 1
-            if p.lives <=0:
-                p.gameover = True
+            ll()
             self.reset()
 
     def reset(self):
@@ -135,12 +132,16 @@ done = False
 
 goText = font.render("GAME OVER",True,red)
 pressSpaceText = font.render("PRESS SPACE BAR TO PLAY AGAIN",True,green)
-
+llsound = pygame.mixer.Sound('Assets/lostLifeSound.ogg')
 def fire():
     b = Bullet()
     bullets_list.add(b)
     lista.add(b)
-
+def ll():
+    llsound.play()
+    p.lives -= 1
+    if p.lives <=0:
+        p.gameover = True
 
 
 while done == False:
@@ -176,10 +177,7 @@ while done == False:
     hitEnemy_list = pygame.sprite.spritecollide(p,enemy_list,False)
     for item in hitEnemy_list:
         if item.color == 0:
-
-            p.lives -= 1
-            if p.lives <=0:
-                p.gameover = True
+            ll()
         else:
             p.score += 1
 
@@ -193,9 +191,7 @@ while done == False:
         if e.color == 0:
             p.score += 1
         else:
-            p.lives -= 1
-            if p.lives <=0:
-                p.gameover = True
+            ll()
 
         bu.reset()
         e.reset()
